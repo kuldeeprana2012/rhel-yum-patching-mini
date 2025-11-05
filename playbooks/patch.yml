@@ -1,0 +1,7 @@
+---
+- name: Apply YUM updates on RHEL systems
+  hosts: client
+  become: true
+  gather_facts: yes
+  roles:
+    - yum-patch

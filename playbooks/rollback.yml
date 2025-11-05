@@ -1,0 +1,8 @@
+---
+- name: Rollback recent YUM update
+  hosts: client
+  become: true
+  tasks:
+    - name: Perform rollback of last yum transaction
+      shell: yum history undo $(yum history | awk '/Update/{print $1; exit}') || true
+      ignore_errors: yes

@@ -1,0 +1,23 @@
+---
+- name: Check available updates
+  shell: yum check-update || true
+  register: update_check
+  changed_when: false
+
+- name: Display available updates
+  debug:
+    msg: "{{ update_check.stdout_lines }}"
+
+- name: Apply YUM patches
+  yum:
+    name: "*"
+    state: latest
+  register: patch_result
+
+- name: Reboot if kernel updated
+  when: "'kernel' in patch_result.results | map(attribute='name') | list"
+  reboot:
+    msg: "Reboot initiated by Jenkins patch job."
+    connect_timeout: 5
+    reboot_timeout: 600
+    test_command: uptime
