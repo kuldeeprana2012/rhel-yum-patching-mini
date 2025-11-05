@@ -6,6 +6,7 @@ pipeline {
     PLAYBOOK  = "playbooks/patch.yml"
     ANSIBLE_HOST_KEY_CHECKING = "False"
     ANSIBLE_SSH_ARGS = "-o StrictHostKeyChecking=no"
+    ANSIBLE_REMOTE_USER = "jenkins"
   }
 
   stages {
