@@ -9,11 +9,20 @@ pipeline {
   }
 
   stages {
-    stage('Checkout Code') {
-      steps {
-        checkout scm
-      }
-    }
+ stage('Checkout') {
+  steps {
+    checkout([$class: 'GitSCM',
+              branches: [[name: '*/main']],
+              userRemoteConfigs: [[url: 'https://github.com/kuldeeprana2012/rhel-yum-patching-mini.git']],
+              extensions: [
+                [$class: 'WipeWorkspace'],
+                [$class: 'CleanBeforeCheckout']
+              ]])
+    sh 'git log -1 --oneline'
+  }
+}
+
+
 
     stage('Precheck') {
       steps {
