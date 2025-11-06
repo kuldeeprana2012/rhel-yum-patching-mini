@@ -2,10 +2,12 @@
 # roles/yum-patch/tasks/main.yml
 
 - name: Ensure all packages metadata are up-to-date
+  become: yes
   yum:
     update_cache: yes
 
 - name: Apply all available YUM updates
+  become: yes
   yum:
     name: "*"
     state: latest
@@ -13,8 +15,9 @@
 
 - name: Show updated packages
   debug:
-    var: patch_result.changes
+    var: patch_result.results
 
 - name: Reboot system if kernel or critical updates were applied
+  become: yes
   reboot:
-  when: "'kernel' in (patch_result.changes | join(' ')) or 'glibc' in (patch_result.changes | join(' '))"
+  when: "'kernel' in (patch_result.results | join(' ')) or 'glibc' in (patch_result.results | join(' '))"
